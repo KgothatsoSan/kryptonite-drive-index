@@ -1,110 +1,337 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Kryptonite Dance Academy — Internal Drive Index</title>
+<title>Kryptonite Dance Academy — Drive Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--black:#0A0A0A;--dark:#171717;--gray:#262626;--red:#DC2626;--redl:#EF4444;--tp:#FFFFFF;--ts:#D4D4D4;--tm:#A3A3A3}
-*{box-sizing:border-box}body{margin:0;font-family:'Inter',system-ui,sans-serif;background:linear-gradient(135deg,#1F2937 0%,#500000 100%);color:var(--ts);line-height:1.6;min-height:100vh}
-header{background:var(--black);border-bottom:1px solid var(--gray);padding:24px 32px;position:sticky;top:0;z-index:30}
-header h1{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:2rem;color:var(--tp);margin:0 0 4px}
-header .sub{color:var(--tm);font-size:.875rem}
-.accent{height:3px;background:linear-gradient(90deg,#DC2626,#EF4444,#F87171);margin-top:12px;border-radius:2px}
-main{max-width:1024px;margin:0 auto;padding:32px}
-section{margin-bottom:40px}
-h2{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.5rem;color:var(--tp);border-bottom:1px solid var(--gray);padding-bottom:8px;margin:0 0 16px}
-h3{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.125rem;color:var(--redl);margin:20px 0 8px}
-p{margin:0 0 12px}ul{margin:0 0 12px;padding-left:20px}li{margin-bottom:6px}
-a{color:var(--redl);text-decoration:none}a:hover{color:var(--red);text-decoration:underline}
-table{width:100%;border-collapse:collapse;margin:12px 0}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--gray)}th{color:var(--tp);font-weight:600;background:var(--dark)}
-.card{background:var(--dark);border:1px solid var(--gray);border-radius:14px;padding:20px;margin-bottom:16px}
-.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
-.toc a{display:block;padding:8px 12px;background:var(--dark);border:1px solid var(--gray);border-radius:8px}.toc a:hover{border-color:var(--red)}
-footer{text-align:center;color:var(--tm);font-size:.75rem;padding:24px;border-top:1px solid var(--gray)}
-@media(max-width:640px){main{padding:16px}header{padding:16px}header h1{font-size:1.5rem}}
+:root{
+  --black:#0A0A0A;--dark:#171717;--dark-2:#1F1F1F;--gray:#262626;--gray-mid:#3A3A3A;
+  --red:#DC2626;--red-dark:#B91C1C;--red-light:#EF4444;
+  --tp:#FFFFFF;--ts:#D4D4D4;--tm:#A3A3A3;--tsub:#737373;
+  --radius:8px;--radius-lg:14px;--radius-xl:20px;
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--black);
+  color:var(--ts);
+  line-height:1.6;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:rgba(220,38,38,.35);color:var(--tp)}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:4px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--dark)}
+::-webkit-scrollbar-thumb{background:var(--gray);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--gray-mid)}
+.caret{caret-color:var(--red)}
+
+/* Skip link */
+.skip{position:absolute;left:-9999px;top:0;background:var(--red);color:#fff;padding:8px 16px;border-radius:0 0 8px 0;z-index:100}
+.skip:focus{left:0}
+
+/* Ambient layer (one motion moment lives here) */
+.ambient{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.ambient::before{content:"";position:absolute;top:-20%;left:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(220,38,38,.12) 0%,transparent 60%);filter:blur(40px);animation:drift 18s ease-in-out infinite alternate}
+.ambient::after{content:"";position:absolute;bottom:-30%;right:-15%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(239,68,68,.08) 0%,transparent 65%);filter:blur(50px);animation:drift 24s ease-in-out infinite alternate-reverse}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(6%,4%)}}
+@media(prefers-reduced-motion:reduce){.ambient::before,.ambient::after{animation:none}}
+
+header,main,footer{position:relative;z-index:1}
+
+header{
+  padding:48px 32px 32px;
+  max-width:1120px;margin:0 auto;
+}
+.wordmark{
+  font-family:'LoveNature',cursive,sans-serif;
+  font-weight:400;
+  font-size:clamp(2.5rem,6vw,4.5rem);
+  line-height:1.05;
+  color:var(--tp);
+  letter-spacing:-0.02em;
+  text-wrap:balance;
+}
+.wordmark span{color:var(--red)}
+.tagline{
+  margin-top:8px;
+  color:var(--tm);
+  font-size:.95rem;
+  max-width:60ch;
+}
+.accent{height:2px;width:120px;background:linear-gradient(90deg,var(--red),var(--red-light));margin-top:24px;border-radius:1px}
+
+/* Search */
+.search-wrap{max-width:1120px;margin:0 auto;padding:0 32px 24px}
+.search{
+  width:100%;max-width:420px;
+  background:var(--dark);
+  border:1px solid var(--gray);
+  border-radius:var(--radius);
+  padding:12px 16px;
+  color:var(--tp);
+  font-size:.95rem;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.search::placeholder{color:var(--tsub)}
+.search:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.15);outline:none}
+
+main{max-width:1120px;margin:0 auto;padding:0 32px 64px}
+
+/* Section */
+.section{margin-bottom:56px}
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin-bottom:20px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--gray);
+}
+.section-title{
+  font-family:'LoveNature',cursive,sans-serif;
+  font-weight:400;
+  font-size:1.5rem;
+  color:var(--tp);
+  text-wrap:balance;
+}
+.section-meta{color:var(--tm);font-size:.8rem}
+
+/* Folder grid — bento-ish */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:12px;
+}
+.card{
+  display:block;
+  background:var(--dark);
+  border:1px solid var(--gray);
+  border-radius:var(--radius-lg);
+  padding:20px 22px;
+  text-decoration:none;
+  color:inherit;
+  transition:border-color .2s ease,transform .2s var(--ease-out),box-shadow .2s ease;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(220,38,38,.06),transparent 40%);
+  opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.card:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.card:hover::before{opacity:1}
+.card:focus-visible{border-color:var(--red)}
+.card-num{
+  font-variant-numeric:tabular-nums;
+  color:var(--red-light);
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.card-name{
+  font-family:'LoveNature',cursive,sans-serif;
+  font-weight:400;
+  font-size:1.15rem;
+  color:var(--tp);
+  margin-bottom:4px;
+  text-wrap:balance;
+}
+.card-desc{color:var(--tm);font-size:.8rem;line-height:1.5}
+
+/* Key docs list */
+.doclist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 24px}
+.doclist a{
+  display:block;
+  padding:6px 0;
+  color:var(--ts);
+  font-size:.9rem;
+  border-bottom:1px solid transparent;
+  transition:color .15s ease,border-color .15s ease;
+}
+.doclist a:hover{color:var(--red-light);border-bottom-color:var(--gray)}
+
+/* Hero block */
+.hero{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  margin-bottom:56px;
+}
+.tile{
+  background:var(--dark);
+  border:1px solid var(--gray);
+  border-radius:var(--radius-xl);
+  padding:24px 26px;
+  text-decoration:none;
+  color:inherit;
+  transition:border-color .2s ease,transform .2s var(--ease-out);
+}
+.tile:hover{border-color:var(--red);transform:translateY(-2px)}
+.tile h3{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.25rem;color:var(--tp);margin-bottom:6px}
+.tile p{color:var(--tm);font-size:.85rem}
+
+/* Excluded note */
+.note{
+  background:var(--dark);
+  border:1px solid var(--gray);
+  border-radius:var(--radius-lg);
+  padding:18px 22px;
+  color:var(--tm);
+  font-size:.85rem;
+}
+.note strong{color:var(--ts);font-weight:500}
+
+/* Footer */
+footer{
+  max-width:1120px;margin:0 auto;padding:24px 32px 48px;
+  color:var(--tsub);
+  font-size:.75rem;
+  border-top:1px solid var(--gray);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+
+/* Entrance motion — one authored moment */
+@media(prefers-reduced-motion:no-preference){
+  .card,.tile{opacity:0;transform:translateY(12px);animation:rise .6s var(--ease-out) forwards}
+  .card:nth-child(1){animation-delay:.05s}
+  .card:nth-child(2){animation-delay:.09s}
+  .card:nth-child(3){animation-delay:.13s}
+  .card:nth-child(4){animation-delay:.17s}
+  .card:nth-child(5){animation-delay:.21s}
+  .card:nth-child(6){animation-delay:.25s}
+  .card:nth-child(7){animation-delay:.29s}
+  .card:nth-child(8){animation-delay:.33s}
+  .card:nth-child(n+9){animation-delay:.37s}
+  .tile:nth-child(1){animation-delay:.02s}
+  .tile:nth-child(2){animation-delay:.06s}
+}
+@keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:720px){
+  header{padding:32px 20px 20px}
+  .search-wrap{padding:0 20px 20px}
+  main{padding:0 20px 48px}
+  .hero{grid-template-columns:1fr}
+  footer{padding:20px}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .doclist{grid-template-columns:1fr}
+}
 </style></head><body>
-<header><h1>Kryptonite Dance Academy</h1><div class="sub">Internal Drive Index &mdash; last reviewed 2026-10-29 &middot; owner: Business owner &middot; access: anyone with the link</div><div class="accent"></div></header>
-<main>
-<section><h2>Quick links</h2><div class="toc">
-<a href="https://drive.google.com/drive/folders/1fgjvFUF3hSvbiE50B9WWoBZNmynN81c3">00 — INDEX &amp; START HERE</a>
-<a href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5">01 — Operations</a>
-<a href="https://drive.google.com/drive/folders/1AMD7D4ynculorhIjokkhBF-HYmObfjBK">02 — People</a>
-<a href="https://drive.google.com/drive/folders/1sfWR1gMeGMhBtiyr-SSRBoozRGn8aFr9">03 — Programmes &amp; Curriculum</a>
-<a href="https://drive.google.com/drive/folders/1hn74aoH79TRM5vT1RwzWBROt-PpEloUU">04 — Finance</a>
-<a href="https://drive.google.com/drive/folders/1G6ohTp_Gtl1jOeQEO5bP_GjbmMsBY_F5">05 — Students &amp; Enrolment</a>
-<a href="https://drive.google.com/drive/folders/1zTUoRoPz8PH2QxNfsxcwBEO_T7LoK_gR">06 — Brand &amp; Marketing</a>
-<a href="https://drive.google.com/drive/folders/1HJxyzO2sh9FmL0bLSYd-lMJNwK5KpN4F">07 — Compliance &amp; Legal</a>
-<a href="https://drive.google.com/drive/folders/1gRZ0LJQREWJ-9RMXXyw2ShsurIrZO6MG">08 — Meetings &amp; Decisions</a>
-<a href="https://drive.google.com/drive/folders/1ZAmKqgDB7xc292njA3l94Q0yujprfDeU">09 — Systems &amp; Technology</a>
-<a href="https://drive.google.com/drive/folders/1GtTPEPwDkM5jgNYVoHDymx0uyFc8AlyS">10 — Templates</a>
-<a href="https://drive.google.com/drive/folders/1gjyuOP1RLQDmMoUrMAJBREzY6JGaC1VC">11 — Media &amp; Content Assets</a>
-<a href="https://drive.google.com/drive/folders/1A2cz99cUmERjoHgGRm469EbDqFRZzlrh">99 — Archive</a>
-</div></section>
-<section><h2>How to use</h2><ul>
-<li>Top-level folders numbered <b>00&ndash;11</b> and <b>99 (Archive)</b>.</li>
-<li>Each folder has a <b>README</b> doc.</li>
-<li><a href="https://docs.google.com/spreadsheets/d/1f7Gb7O_IWu7W029uOkumCpdaae9l1VUW6ieaLWittog/edit">File Register</a> &mdash; auditable list of every file.</li>
-<li>Excluded: ACCOUNTING - DANCE ACADEMY and JHB KRYPTONITE (left in original locations).</li>
-<li>Superseded items move to <b>99 &mdash; Archive</b>, never deleted.</li>
-</ul></section>
-<section><h2>01 &mdash; Operations</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1QrGZM116_48pLluKm572tveL7AmaAYDx">Competitions</a> &mdash; 2026, 2025, REPORTING TRACKER, CARRY-FORWARD REGISTER, REPORTING TEMPLATES</li>
-<li><a href="https://drive.google.com/drive/folders/19K7V-6ZBshG_cKl-G2etQS7f76mc81Ps">Evaluations</a> &mdash; TEMPLATE v2 master, 2026 Term 1&ndash;3, 2024 competition auditions</li>
-<li><a href="https://drive.google.com/drive/folders/190UScC-kuBaS-YZRImCpRKjxLuZP1m6x">Studio Space</a></li>
-</ul></section>
-<section><h2>03 &mdash; Programmes &amp; Curriculum</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1IujK-qp6lAFz2p-m2hr_mtl2x2mB0cI9">Documents</a> &mdash; curricula, Teaching Standards, codes of conduct, disciplinary, Dance terms, Departments, Vision, Culture, Dancer Archetypes, Welcome, enrollment confirmations, Hip Hop course, Web Pages, Assignment submissions</li>
-<li><a href="https://drive.google.com/drive/folders/1D3e6YPfD3pJ9q9_eckK1g8sn0ctW9dXT">Student material</a> &mdash; Cool Kids, Beginner, Intermediate, Advanced</li>
-<li><a href="https://drive.google.com/file/d/1A5Q4uHDcCw_ye6U1VuuIbkW6YbuTB-HG/view">Genesis program.docx</a></li>
-</ul></section>
-<section><h2>04 &mdash; Finance</h2><ul><li><a href="https://drive.google.com/drive/folders/1lq01baOZ31g5VfexogAQuQA3HFXdIA7K">CLASS PACKAGES INFORMATION</a> &mdash; Beginner Training.pdf</li></ul></section>
-<section><h2>05 &mdash; Students &amp; Enrolment</h2><ul><li><a href="https://drive.google.com/drive/folders/15kCDDZxPk0bxPYbhl1ERJImykIsd6G6N">ITENSITY DATABASE</a></li></ul></section>
-<section><h2>06 &mdash; Brand &amp; Marketing</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1oqMRct35Q8dCykAHNoT2imaVoar0RoNK">Social Media</a> &mdash; enrolment forms &amp; responses, bootcamp sign-ups, content planning, analytics, videos</li>
-<li><a href="https://drive.google.com/drive/folders/1RmLF_JYHJ5CtpM64jh0N5JcLtSGOVLTc">Designs</a></li><li><a href="https://drive.google.com/drive/folders/1XqyUgj3YjxVYa5p0zcD_UO_0LqrT2GcB">Pictures</a></li>
-<li><a href="https://drive.google.com/drive/folders/1wl9_6GXFtrrMYNRFtzNjjj806bFJAdp2">Merchandise</a></li><li><a href="https://drive.google.com/drive/folders/1RFvG1FInTXVCZArMYtnI2eDP4eBDng8M">Stationary</a></li>
-<li><a href="https://drive.google.com/drive/folders/1HVPqwVE1zLqrmVLyTp0jtsj-erVHKB2K">Kreativz</a></li>
-</ul></section>
-<section><h2>08 &mdash; Meetings &amp; Decisions</h2><ul><li><a href="https://docs.google.com/document/d/1Hlnvfw6eSMNmrBNxwHgfRTSlaZ_72GEnaRvmeIwdARk/edit">Strategy Meeting</a></li></ul></section>
-<section><h2>09 &mdash; Systems &amp; Technology</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1NneYwhhdxOgoLmE13OMeTvdveTIi9s-0">System</a> &mdash; Functional Specification</li>
-<li><a href="https://docs.google.com/spreadsheets/d/1WlEIYeS-or37HBF5ej62g81XfFJ51KF_JcYe2J7AYDk/edit">Bootcamp Schedule</a></li>
-<li><a href="https://drive.google.com/drive/folders/1x0GszQPSmgaYosSO8hmOH4xudLkoPUjk">Systems &amp; Processes</a> &mdash; client exit questionnaire, 2025 competition calendar, bluetooth device</li>
-</ul></section>
-<section><h2>11 &mdash; Media &amp; Content Assets</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1EaEsB7ZT23sRBQZNDYnidIbeHd3Th-aP">Mixes</a></li><li><a href="https://drive.google.com/drive/folders/1pym_xHqAfZ86w1Gwtza4rAA4GXvf73cc">Video Content (Dance Academy)</a></li>
-<li><a href="https://drive.google.com/drive/folders/1j8A_WtAfz6h3RGB2kVIRziF3-14f_w3G">Video Content (Kryptonite)</a></li><li><a href="https://drive.google.com/drive/folders/1m_9O8CJpHoeXy9r_u0ttFYVqBGL42_L5">Shoot</a></li>
-<li><a href="https://drive.google.com/drive/folders/1cIAwskl_90TZylnLeBFt9yBMpVQPYpML">DSCL</a></li><li><a href="https://drive.google.com/drive/folders/1-GwhIvOH5A_cuv5tbkVX_GMQ9wR5fe7w">Class Pictures: Choreographers</a></li>
-<li><a href="https://drive.google.com/drive/folders/1qxN6X03jM2cHljoinpxjRjOHlRVGWnnl">Kids hip hop class</a></li><li><a href="https://drive.google.com/drive/folders/1gT6TFSvbzhfZVN78z2E-lM0OkjlmcBgl">Hunger Games : KRUMP VS HIP HOP</a></li>
-</ul></section>
-<section><h2>99 &mdash; Archive</h2><ul>
-<li><a href="https://drive.google.com/drive/folders/1n7dpvoghGSdLNrsV1YY4eMi9e-eEBz8C">Archive (old attendance sheets, old evaluations)</a></li>
-<li><a href="https://docs.google.com/document/d/1uxZCqffzLaaU4z8dDgBrGbiUpbYenV2GlSCjSI4JT-g/edit">Untitled document (archived 2026-10-29)</a></li>
-</ul></section>
-<section><h2>Excluded (left in original location)</h2><ul><li>ACCOUNTING - DANCE ACADEMY</li><li>JHB KRYPTONITE</li></ul></section>
-<section><h2>Key documents</h2><div class="card"><ul>
-<li><a href="https://docs.google.com/document/d/1_HFGxW1LeoXxg95W1azElr2jRHtnJXRH367qxQsM6Pc/edit">Beginner Curriculum</a></li>
-<li><a href="https://docs.google.com/document/d/1y63i4j0jK3rAgfsZFCraa5hHxC12iDe1n9QXm4mHWxg/edit">Intermediate Curriculum</a></li>
-<li><a href="https://docs.google.com/document/d/1QaXHKXK3iTHQnS8nh2BKo7EZdEXs9MdkWgGr4KOcl5M/edit">Advanced Curriculum</a></li>
-<li><a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a></li>
-<li><a href="https://docs.google.com/document/d/1Epcqp9FI0KuHZIHrqBzyNivf-klWDh65tOmCLx4Rjkg/edit">Students code of Conduct</a></li>
-<li><a href="https://docs.google.com/document/d/19inCOimMdxB7T0UKP3Ik6ySNzB-ftz7qnmIE5_2ctww/edit">Employee code of conduct</a></li>
-<li><a href="https://docs.google.com/document/d/14X0cW9IppCsHrjX8Dyj_tAoJQf2ymk4UK-jaHKr75E0/edit">Disciplinary procedure</a></li>
-<li><a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite Dance Academy</a></li>
-<li><a href="https://docs.google.com/document/d/1VUG-sQ7FmlYLEZFrlHuHbq70OXL3tYuE6H64Q9BqPPc/edit">Confirmation of enrollment</a></li>
-<li><a href="https://docs.google.com/document/d/1xc2gGvRoBfcuvPCIkzpiaatYDX1SYG90ST7NJ3NLhMM/edit">DANCER ARCHETYPES</a></li>
-<li><a href="https://docs.google.com/document/d/1IeVTkOaxNlNfzQn08HxQ0s-ZHNcp14el7XTvZo4sbCs/edit">Vision</a></li>
-<li><a href="https://docs.google.com/document/d/16nEgEzF5mkNEFK02lr75LLO-XLO7o16My4x7m9UFyj8/edit">Dance terms</a></li>
-<li><a href="https://docs.google.com/document/d/10313y8ZbiMjEd8SuVNcTZOyTIombUjlFO-hqR6MVaYk/edit">Departments</a></li>
-<li><a href="https://docs.google.com/document/d/1SpE1BCH2JUT88DIQm6vD3NTLBD6WKbbUTCRgZ-xMeDE/edit">Hip Hop course</a></li>
-<li><a href="https://docs.google.com/document/d/1Azoznk2MzHWolIHqbR2Y2pmPVgVgSWCJjqhzKaykvyo/edit">Functional Specification</a></li>
-</ul></div></section>
-<section><h2>New staff &mdash; start here</h2><ol>
-<li>Read <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite Dance Academy</a>.</li>
-<li>Read <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a> and the codes of conduct.</li>
-<li>Check <a href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5">01 &mdash; Operations</a> for the current timetable and evaluation schedule.</li>
-<li>Ask the business owner which folders you have edit access to.</li>
-</ol></section>
+<a class="skip" href="#main">Skip to content</a>
+<div class="ambient" aria-hidden="true"></div>
+
+<header>
+  <h1 class="wordmark">Kryptonite <span>Dance Academy</span></h1>
+  <p class="tagline">Internal drive index — every folder, document and asset, in one place. Last reviewed 29 Oct 2026.</p>
+  <div class="accent"></div>
+</header>
+
+<div class="search-wrap">
+  <input id="q" class="search caret" type="search" placeholder="Filter folders and documents…" aria-label="Filter folders and documents" autocomplete="off">
+</div>
+
+<main id="main">
+
+<section class="hero">
+  <a class="tile" href="https://docs.google.com/spreadsheets/d/1f7Gb7O_IWu7W029uOkumCpdaae9l1VUW6ieaLWittog/edit">
+    <h3>File Register</h3>
+    <p>Auditable list of every file — owner, last-reviewed date, status and link.</p>
+  </a>
+  <a class="tile" href="https://docs.google.com/document/d/1Z6ByyiUgUsTVkvD8rgXlBroDJtcw6FXZKROnt4MY2uM/edit">
+    <h3>Client Information</h3>
+    <p>Parent-facing page: welcome, timetable, policies, fees, events, contact.</p>
+  </a>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">Folders</h2>
+    <span class="section-meta">00 – 11 · 99 archive</span>
+  </div>
+  <div class="grid" id="folders">
+    <a class="card" href="https://drive.google.com/drive/folders/1fgjvFUF3hSvbiE50B9WWoBZNmynN81c3" data-k="index start here 00"><div class="card-num">00</div><div class="card-name">INDEX &amp; START HERE</div><div class="card-desc">Master index, client info page, file register, READMEs.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5" data-k="operations 01 timetable evaluations competitions show"><div class="card-num">01</div><div class="card-name">Operations</div><div class="card-desc">Timetable, evaluations, competitions, show &amp; events, SOPs.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1AMD7D4ynculorhIjokkhBF-HYmObfjBK" data-k="people 02 mentors staff training"><div class="card-num">02</div><div class="card-name">People</div><div class="card-desc">Mentor roster, roles, training, onboarding, performance.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1sfWR1gMeGMhBtiyr-SSRBoozRGn8aFr9" data-k="programmes curriculum 03"><div class="card-num">03</div><div class="card-name">Programmes &amp; Curriculum</div><div class="card-desc">Curricula, student material, lesson plans, progression.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1hn74aoH79TRM5vT1RwzWBROt-PpEloUU" data-k="finance 04 fees invoices vat"><div class="card-num">04</div><div class="card-name">Finance</div><div class="card-desc">Rate card, fees, invoices, collections, VAT, trip budgets.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1G6ohTp_Gtl1jOeQEO5bP_GjbmMsBY_F5" data-k="students enrolment 05"><div class="card-num">05</div><div class="card-name">Students &amp; Enrolment</div><div class="card-desc">Student records, enrolment forms, parent comms.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1zTUoRoPz8PH2QxNfsxcwBEO_T7LoK_gR" data-k="brand marketing 06"><div class="card-num">06</div><div class="card-name">Brand &amp; Marketing</div><div class="card-desc">Brand assets, website, SEO, campaigns, partnerships.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1HJxyzO2sh9FmL0bLSYd-lMJNwK5KpN4F" data-k="compliance legal 07 popia"><div class="card-num">07</div><div class="card-name">Compliance &amp; Legal</div><div class="card-desc">POPIA, child protection, terms, insurance.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1gRZ0LJQREWJ-9RMXXyw2ShsurIrZO6MG" data-k="meetings decisions 08"><div class="card-num">08</div><div class="card-name">Meetings &amp; Decisions</div><div class="card-desc">Minutes, decisions log, open actions.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1ZAmKqgDB7xc292njA3l94Q0yujprfDeU" data-k="systems technology 09"><div class="card-num">09</div><div class="card-name">Systems &amp; Technology</div><div class="card-desc">System spec, bootcamp schedule, integrations.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1GtTPEPwDkM5jgNYVoHDymx0uyFc8AlyS" data-k="templates 10"><div class="card-num">10</div><div class="card-name">Templates</div><div class="card-desc">Letters, emails, reports, forms.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1gjyuOP1RLQDmMoUrMAJBREzY6JGaC1VC" data-k="media content assets 11"><div class="card-num">11</div><div class="card-name">Media &amp; Content Assets</div><div class="card-desc">Mixes, video, shoots, photos, class pictures.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1A2cz99cUmERjoHgGRm469EbDqFRZzlrh" data-k="archive 99"><div class="card-num">99</div><div class="card-name">Archive</div><div class="card-desc">Superseded and historical files. Nothing deleted.</div></a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2 class="section-title">Key documents</h2><span class="section-meta">curricula, standards, policies</span></div>
+  <div class="doclist">
+    <a href="https://docs.google.com/document/d/1_HFGxW1LeoXxg95W1azElr2jRHtnJXRH367qxQsM6Pc/edit">Beginner Curriculum</a>
+    <a href="https://docs.google.com/document/d/1y63i4j0jK3rAgfsZFCraa5hHxC12iDe1n9QXm4mHWxg/edit">Intermediate Curriculum</a>
+    <a href="https://docs.google.com/document/d/1QaXHKXK3iTHQnS8nh2BKo7EZdEXs9MdkWgGr4KOcl5M/edit">Advanced Curriculum</a>
+    <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a>
+    <a href="https://docs.google.com/document/d/1Epcqp9FI0KuHZIHrqBzyNivf-klWDh65tOmCLx4Rjkg/edit">Students code of Conduct</a>
+    <a href="https://docs.google.com/document/d/19inCOimMdxB7T0UKP3Ik6ySNzB-ftz7qnmIE5_2ctww/edit">Employee code of conduct</a>
+    <a href="https://docs.google.com/document/d/14X0cW9IppCsHrjX8Dyj_tAoJQf2ymk4UK-jaHKr75E0/edit">Disciplinary procedure</a>
+    <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite</a>
+    <a href="https://docs.google.com/document/d/1VUG-sQ7FmlYLEZFrlHuHbq70OXL3tYuE6H64Q9BqPPc/edit">Confirmation of enrollment</a>
+    <a href="https://docs.google.com/document/d/1xc2gGvRoBfcuvPCIkzpiaatYDX1SYG90ST7NJ3NLhMM/edit">Dancer Archetypes</a>
+    <a href="https://docs.google.com/document/d/1IeVTkOaxNlNfzQn08HxQ0s-ZHNcp14el7XTvZo4sbCs/edit">Vision</a>
+    <a href="https://docs.google.com/document/d/16nEgEzF5mkNEFK02lr75LLO-XLO7o16My4x7m9UFyj8/edit">Dance terms</a>
+    <a href="https://docs.google.com/document/d/10313y8ZbiMjEd8SuVNcTZOyTIombUjlFO-hqR6MVaYk/edit">Departments</a>
+    <a href="https://docs.google.com/document/d/1SpE1BCH2JUT88DIQm6vD3NTLBD6WKbbUTCRgZ-xMeDE/edit">Hip Hop course</a>
+    <a href="https://docs.google.com/document/d/1Azoznk2MzHWolIHqbR2Y2pmPVgVgSWCJjqhzKaykvyo/edit">Functional Specification</a>
+    <a href="https://docs.google.com/document/d/1Hlnvfw6eSMNmrBNxwHgfRTSlaZ_72GEnaRvmeIwdARk/edit">Strategy Meeting</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2 class="section-title">Excluded</h2><span class="section-meta">left in original location</span></div>
+  <div class="note"><strong>ACCOUNTING - DANCE ACADEMY</strong> and <strong>JHB KRYPTONITE</strong> were not moved. Invoices, NEDBANK statements and JHB content remain where they were.</div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2 class="section-title">New staff</h2><span class="section-meta">start here</span></div>
+  <ol style="padding-left:20px;color:var(--ts)">
+    <li style="margin-bottom:8px">Read <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite Dance Academy</a>.</li>
+    <li style="margin-bottom:8px">Read <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a> and the codes of conduct.</li>
+    <li style="margin-bottom:8px">Check <a href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5">01 — Operations</a> for the current timetable and evaluation schedule.</li>
+    <li>Ask the business owner which folders you have edit access to.</li>
+  </ol>
+</section>
+
 </main>
-<footer>Kryptonite Dance Academy &middot; Internal Drive Index &middot; 2026-10-29</footer>
+
+<footer>
+  <span>Kryptonite Dance Academy</span>
+  <span>Internal Drive Index &middot; 2026-10-29</span>
+</footer>
+
+<script>
+// Client-side filter
+const q = document.getElementById('q');
+const cards = [...document.querySelectorAll('#folders .card')];
+q.addEventListener('input', () => {
+  const v = q.value.trim().toLowerCase();
+  cards.forEach(c => {
+    const hay = (c.dataset.k + ' ' + c.textContent).toLowerCase();
+    c.style.display = hay.includes(v) ? '' : 'none';
+  });
+});
+// Subtle cursor-tracking glow on cards
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('pointermove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+</script>
 </body></html>
