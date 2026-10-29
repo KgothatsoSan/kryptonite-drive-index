@@ -1,323 +1,271 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Kryptonite Dance Academy — Drive Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --black:#0A0A0A;--dark:#171717;--dark-2:#1F1F1F;--gray:#262626;--gray-mid:#3A3A3A;
-  --red:#DC2626;--red-dark:#B91C1C;--red-light:#EF4444;
+  --black:#0A0A0A;--dark:#141414;--dark-2:#1C1C1C;--gray:#262626;--gray-mid:#3A3A3A;
+  --red:#DC2626;--red-dark:#B91C1C;--red-light:#EF4444;--red-glow:rgba(220,38,38,.18);
   --tp:#FFFFFF;--ts:#D4D4D4;--tm:#A3A3A3;--tsub:#737373;
-  --radius:8px;--radius-lg:14px;--radius-xl:20px;
+  --radius:10px;--radius-lg:16px;--radius-xl:24px;
   --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --ease-in-out:cubic-bezier(0.4,0,0.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Inter',system-ui,-apple-system,sans-serif;
-  background:var(--black);
-  color:var(--ts);
-  line-height:1.6;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-::selection{background:rgba(220,38,38,.35);color:var(--tp)}
-:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:4px}
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-track{background:var(--dark)}
-::-webkit-scrollbar-thumb{background:var(--gray);border-radius:5px}
-::-webkit-scrollbar-thumb:hover{background:var(--gray-mid)}
-.caret{caret-color:var(--red)}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--black);color:var(--ts);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+::selection{background:rgba(220,38,38,.4);color:var(--tp)}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:4px}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--gray);border-radius:5px}::-webkit-scrollbar-thumb:hover{background:var(--gray-mid)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--red);color:#fff;padding:8px 16px;border-radius:0 0 8px 0;z-index:100}.skip:focus{left:0}
 
-/* Skip link */
-.skip{position:absolute;left:-9999px;top:0;background:var(--red);color:#fff;padding:8px 16px;border-radius:0 0 8px 0;z-index:100}
-.skip:focus{left:0}
+/* Animated mesh background */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mesh::before,.mesh::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.55}
+.mesh::before{width:55vw;height:55vw;top:-15%;left:-10%;background:radial-gradient(circle,#DC2626 0%,transparent 70%);animation:float1 22s ease-in-out infinite alternate}
+.mesh::after{width:45vw;height:45vw;bottom:-20%;right:-10%;background:radial-gradient(circle,#7F1D1D 0%,transparent 70%);animation:float2 28s ease-in-out infinite alternate}
+@keyframes float1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(8%,6%) scale(1.1)}}
+@keyframes float2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-6%,-4%) scale(1.08)}}
+.mesh-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%)}
+@media(prefers-reduced-motion:reduce){.mesh::before,.mesh::after{animation:none}}
 
-/* Ambient layer (one motion moment lives here) */
-.ambient{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-.ambient::before{content:"";position:absolute;top:-20%;left:-10%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(220,38,38,.12) 0%,transparent 60%);filter:blur(40px);animation:drift 18s ease-in-out infinite alternate}
-.ambient::after{content:"";position:absolute;bottom:-30%;right:-15%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(239,68,68,.08) 0%,transparent 65%);filter:blur(50px);animation:drift 24s ease-in-out infinite alternate-reverse}
-@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(6%,4%)}}
-@media(prefers-reduced-motion:reduce){.ambient::before,.ambient::after{animation:none}}
+header,main,footer,nav{position:relative;z-index:1}
 
-header,main,footer{position:relative;z-index:1}
+/* Nav */
+nav{max-width:1200px;margin:0 auto;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.4rem;color:var(--tp);text-decoration:none}
+.logo span{color:var(--red)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:var(--tm);text-decoration:none;font-size:.85rem;transition:color .2s ease}
+.nav-links a:hover{color:var(--tp)}
+@media(max-width:640px){.nav-links{display:none}}
 
-header{
-  padding:48px 32px 32px;
-  max-width:1120px;margin:0 auto;
-}
-.wordmark{
-  font-family:'LoveNature',cursive,sans-serif;
-  font-weight:400;
-  font-size:clamp(2.5rem,6vw,4.5rem);
-  line-height:1.05;
-  color:var(--tp);
-  letter-spacing:-0.02em;
-  text-wrap:balance;
-}
-.wordmark span{color:var(--red)}
-.tagline{
-  margin-top:8px;
-  color:var(--tm);
-  font-size:.95rem;
-  max-width:60ch;
-}
-.accent{height:2px;width:120px;background:linear-gradient(90deg,var(--red),var(--red-light));margin-top:24px;border-radius:1px}
+/* Hero */
+.hero{max-width:1200px;margin:0 auto;padding:80px 32px 64px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--red-light);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:24px}
+.hero-eyebrow::before{content:"";width:32px;height:1px;background:var(--red)}
+.hero-title{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:clamp(3rem,8vw,6rem);line-height:1.02;color:var(--tp);letter-spacing:-0.02em;text-wrap:balance;margin-bottom:20px}
+.hero-title .accent{color:var(--red)}
+.hero-sub{color:var(--ts);font-size:1.1rem;max-width:58ch;margin-bottom:36px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:var(--radius);font-size:.9rem;font-weight:500;text-decoration:none;transition:transform .2s var(--ease-out),box-shadow .2s ease,background .2s ease}
+.btn-primary{background:var(--red);color:#fff;box-shadow:0 4px 20px var(--red-glow)}
+.btn-primary:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 28px var(--red-glow)}
+.btn-ghost{background:transparent;color:var(--ts);border:1px solid var(--gray)}
+.btn-ghost:hover{border-color:var(--red);color:var(--tp);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:40px;margin-top:56px;flex-wrap:wrap}
+.stat-num{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:2.4rem;color:var(--tp);line-height:1;font-variant-numeric:tabular-nums}
+.stat-label{color:var(--tm);font-size:.8rem;margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
 
-/* Search */
-.search-wrap{max-width:1120px;margin:0 auto;padding:0 32px 24px}
-.search{
-  width:100%;max-width:420px;
-  background:var(--dark);
-  border:1px solid var(--gray);
-  border-radius:var(--radius);
-  padding:12px 16px;
-  color:var(--tp);
-  font-size:.95rem;
-  transition:border-color .2s ease,box-shadow .2s ease;
-}
-.search::placeholder{color:var(--tsub)}
-.search:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.15);outline:none}
-
-main{max-width:1120px;margin:0 auto;padding:0 32px 64px}
+main{max-width:1200px;margin:0 auto;padding:0 32px 80px}
 
 /* Section */
-.section{margin-bottom:56px}
-.section-head{
-  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-  margin-bottom:20px;
-  padding-bottom:12px;
-  border-bottom:1px solid var(--gray);
-}
-.section-title{
-  font-family:'LoveNature',cursive,sans-serif;
-  font-weight:400;
-  font-size:1.5rem;
-  color:var(--tp);
-  text-wrap:balance;
-}
-.section-meta{color:var(--tm);font-size:.8rem}
+.section{margin-bottom:80px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--gray)}
+.section-title{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:2rem;color:var(--tp);text-wrap:balance}
+.section-meta{color:var(--tm);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.reveal.in{opacity:1;transform:translateY(0)}
 
-/* Folder grid — bento-ish */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:12px;
-}
+/* Folder grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
 .card{
-  display:block;
-  background:var(--dark);
+  display:block;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,var(--dark) 0%,var(--dark-2) 100%);
   border:1px solid var(--gray);
   border-radius:var(--radius-lg);
-  padding:20px 22px;
-  text-decoration:none;
-  color:inherit;
-  transition:border-color .2s ease,transform .2s var(--ease-out),box-shadow .2s ease;
-  position:relative;
-  overflow:hidden;
-}
-.card::before{
-  content:"";position:absolute;inset:0;
-  background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(220,38,38,.06),transparent 40%);
-  opacity:0;transition:opacity .3s ease;pointer-events:none;
-}
-.card:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
-.card:hover::before{opacity:1}
-.card:focus-visible{border-color:var(--red)}
-.card-num{
-  font-variant-numeric:tabular-nums;
-  color:var(--red-light);
-  font-size:.75rem;
-  font-weight:600;
-  letter-spacing:.08em;
-  margin-bottom:6px;
-}
-.card-name{
-  font-family:'LoveNature',cursive,sans-serif;
-  font-weight:400;
-  font-size:1.15rem;
-  color:var(--tp);
-  margin-bottom:4px;
-  text-wrap:balance;
-}
-.card-desc{color:var(--tm);font-size:.8rem;line-height:1.5}
-
-/* Key docs list */
-.doclist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 24px}
-.doclist a{
-  display:block;
-  padding:6px 0;
-  color:var(--ts);
-  font-size:.9rem;
-  border-bottom:1px solid transparent;
-  transition:color .15s ease,border-color .15s ease;
-}
-.doclist a:hover{color:var(--red-light);border-bottom-color:var(--gray)}
-
-/* Hero block */
-.hero{
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;
-  margin-bottom:56px;
-}
-.tile{
-  background:var(--dark);
-  border:1px solid var(--gray);
-  border-radius:var(--radius-xl);
   padding:24px 26px;
-  text-decoration:none;
-  color:inherit;
-  transition:border-color .2s ease,transform .2s var(--ease-out);
+  text-decoration:none;color:inherit;
+  transition:border-color .25s ease,transform .3s var(--ease-out),box-shadow .3s ease;
 }
-.tile:hover{border-color:var(--red);transform:translateY(-2px)}
-.tile h3{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.25rem;color:var(--tp);margin-bottom:6px}
-.tile p{color:var(--tm);font-size:.85rem}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(220,38,38,.10),transparent 45%);opacity:0;transition:opacity .3s ease;pointer-events:none}
+.card:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.45),0 0 0 1px rgba(220,38,38,.2)}
+.card:hover::before{opacity:1}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-num{font-variant-numeric:tabular-nums;color:var(--red-light);font-size:.75rem;font-weight:700;letter-spacing:.12em}
+.card-arrow{color:var(--tsub);font-size:.9rem;transition:transform .25s var(--ease-out),color .25s ease}
+.card:hover .card-arrow{transform:translate(3px,-3px);color:var(--red-light)}
+.card-name{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.3rem;color:var(--tp);margin-bottom:6px;text-wrap:balance;line-height:1.2}
+.card-desc{color:var(--tm);font-size:.85rem;line-height:1.55}
+
+/* Hero tiles */
+.hero-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:80px}
+.tile{display:block;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--dark) 0%,#1a0a0a 100%);border:1px solid var(--gray);border-radius:var(--radius-xl);padding:32px;text-decoration:none;color:inherit;transition:border-color .25s ease,transform .3s var(--ease-out)}
+.tile::after{content:"";position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(220,38,38,.25),transparent 70%);pointer-events:none}
+.tile:hover{border-color:var(--red);transform:translateY(-4px)}
+.tile h3{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.5rem;color:var(--tp);margin-bottom:8px}
+.tile p{color:var(--tm);font-size:.9rem;max-width:40ch}
+
+/* Key docs */
+.docgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.doc{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--dark);border:1px solid var(--gray);border-radius:var(--radius);text-decoration:none;color:var(--ts);font-size:.85rem;transition:border-color .2s ease,background .2s ease,transform .2s var(--ease-out)}
+.doc:hover{border-color:var(--red);background:var(--dark-2);color:var(--tp);transform:translateX(2px)}
+.doc::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
 
 /* Excluded note */
-.note{
-  background:var(--dark);
-  border:1px solid var(--gray);
-  border-radius:var(--radius-lg);
-  padding:18px 22px;
-  color:var(--tm);
-  font-size:.85rem;
-}
+.note{display:flex;gap:14px;align-items:flex-start;background:var(--dark);border:1px solid var(--gray);border-radius:var(--radius-lg);padding:20px 24px}
+.note-icon{color:var(--red-light);font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.note p{color:var(--tm);font-size:.85rem;margin:0}
 .note strong{color:var(--ts);font-weight:500}
 
-/* Footer */
-footer{
-  max-width:1120px;margin:0 auto;padding:24px 32px 48px;
-  color:var(--tsub);
-  font-size:.75rem;
-  border-top:1px solid var(--gray);
-  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
-}
+/* New staff steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;counter-reset:step}
+.step{background:var(--dark);border:1px solid var(--gray);border-radius:var(--radius-lg);padding:22px 24px;position:relative;counter-increment:step}
+.step::before{content:counter(step,decimal-leading-zero);position:absolute;top:18px;right:20px;font-variant-numeric:tabular-nums;color:var(--gray-mid);font-size:.75rem;font-weight:600}
+.step h4{font-family:'LoveNature',cursive,sans-serif;font-weight:400;font-size:1.1rem;color:var(--tp);margin-bottom:6px}
+.step p{color:var(--tm);font-size:.85rem}
+.step a{color:var(--red-light)}
 
-/* Entrance motion — one authored moment */
-@media(prefers-reduced-motion:no-preference){
-  .card,.tile{opacity:0;transform:translateY(12px);animation:rise .6s var(--ease-out) forwards}
-  .card:nth-child(1){animation-delay:.05s}
-  .card:nth-child(2){animation-delay:.09s}
-  .card:nth-child(3){animation-delay:.13s}
-  .card:nth-child(4){animation-delay:.17s}
-  .card:nth-child(5){animation-delay:.21s}
-  .card:nth-child(6){animation-delay:.25s}
-  .card:nth-child(7){animation-delay:.29s}
-  .card:nth-child(8){animation-delay:.33s}
-  .card:nth-child(n+9){animation-delay:.37s}
-  .tile:nth-child(1){animation-delay:.02s}
-  .tile:nth-child(2){animation-delay:.06s}
-}
-@keyframes rise{to{opacity:1;transform:translateY(0)}}
+/* Search */
+.search-wrap{max-width:1200px;margin:0 auto;padding:0 32px 48px}
+.search{width:100%;max-width:460px;background:var(--dark);border:1px solid var(--gray);border-radius:var(--radius);padding:14px 18px;color:var(--tp);font-size:.95rem;transition:border-color .2s ease,box-shadow .2s ease}
+.search::placeholder{color:var(--tsub)}
+.search:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(220,38,38,.12);outline:none}
 
-@media(max-width:720px){
-  header{padding:32px 20px 20px}
-  .search-wrap{padding:0 20px 20px}
-  main{padding:0 20px 48px}
-  .hero{grid-template-columns:1fr}
-  footer{padding:20px}
+footer{max-width:1200px;margin:0 auto;padding:32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--tsub);font-size:.75rem;border-top:1px solid var(--gray)}
+footer a{color:var(--tm);text-decoration:none}footer a:hover{color:var(--red-light)}
+
+@media(max-width:768px){
+  nav{padding:16px 20px}.hero{padding:48px 20px 40px}main{padding:0 20px 64px}.search-wrap{padding:0 20px 32px}footer{padding:24px 20px}
+  .hero-stats{gap:24px}.stat-num{font-size:2rem}
 }
-@media(max-width:480px){
-  .grid{grid-template-columns:1fr}
-  .doclist{grid-template-columns:1fr}
-}
-</style></head><body>
+@media(max-width:480px){.grid{grid-template-columns:1fr}.hero-tiles{grid-template-columns:1fr}.docgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="ambient" aria-hidden="true"></div>
+<div class="mesh" aria-hidden="true"><div class="mesh-grid"></div></div>
 
-<header>
-  <h1 class="wordmark">Kryptonite <span>Dance Academy</span></h1>
-  <p class="tagline">Internal drive index — every folder, document and asset, in one place. Last reviewed 29 Oct 2026.</p>
-  <div class="accent"></div>
-</header>
+<nav>
+  <a class="logo" href="#">Kryptonite <span>Dance Academy</span></a>
+  <ul class="nav-links">
+    <li><a href="#folders">Folders</a></li>
+    <li><a href="#documents">Documents</a></li>
+    <li><a href="#onboard">New staff</a></li>
+    <li><a href="https://docs.google.com/document/d/1Z6ByyiUgUsTVkvD8rgXlBroDJtcw6FXZKROnt4MY2uM/edit" target="_blank" rel="noopener">Client info</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Internal drive index</div>
+  <h1 class="hero-title">Everything the academy <span class="accent">needs</span>, in one place.</h1>
+  <p class="hero-sub">Folders, documents, media and assets — reorganised, indexed and hyperlinked. Last reviewed 29 Oct 2026.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://docs.google.com/spreadsheets/d/1f7Gb7O_IWu7W029uOkumCpdaae9l1VUW6ieaLWittog/edit" target="_blank" rel="noopener">Open File Register</a>
+    <a class="btn btn-ghost" href="https://docs.google.com/document/d/13U59DAA61tneuiWaADBOPlWBYQ7_NLYdv42Dod1xDN4/edit" target="_blank" rel="noopener">Internal index (Doc)</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="stat-num">13</div><div class="stat-label">Top-level folders</div></div>
+    <div><div class="stat-num">46</div><div class="stat-label">Registered files</div></div>
+    <div><div class="stat-num">15</div><div class="stat-label">Key documents</div></div>
+  </div>
+</section>
 
 <div class="search-wrap">
-  <input id="q" class="search caret" type="search" placeholder="Filter folders and documents…" aria-label="Filter folders and documents" autocomplete="off">
+  <input id="q" class="search" type="search" placeholder="Filter folders and documents…" aria-label="Filter folders and documents" autocomplete="off">
 </div>
 
 <main id="main">
 
-<section class="hero">
-  <a class="tile" href="https://docs.google.com/spreadsheets/d/1f7Gb7O_IWu7W029uOkumCpdaae9l1VUW6ieaLWittog/edit">
-    <h3>File Register</h3>
-    <p>Auditable list of every file — owner, last-reviewed date, status and link.</p>
-  </a>
-  <a class="tile" href="https://docs.google.com/document/d/1Z6ByyiUgUsTVkvD8rgXlBroDJtcw6FXZKROnt4MY2uM/edit">
-    <h3>Client Information</h3>
-    <p>Parent-facing page: welcome, timetable, policies, fees, events, contact.</p>
-  </a>
+<section class="section" id="tiles">
+  <div class="hero-tiles">
+    <a class="tile" href="https://docs.google.com/spreadsheets/d/1f7Gb7O_IWu7W029uOkumCpdaae9l1VUW6ieaLWittog/edit" target="_blank" rel="noopener">
+      <h3>File Register</h3>
+      <p>Auditable list of every file — owner, last-reviewed date, status and link.</p>
+    </a>
+    <a class="tile" href="https://docs.google.com/document/d/1Z6ByyiUgUsTVkvD8rgXlBroDJtcw6FXZKROnt4MY2uM/edit" target="_blank" rel="noopener">
+      <h3>Client Information</h3>
+      <p>Parent-facing page: welcome, timetable, policies, fees, events, contact.</p>
+    </a>
+  </div>
 </section>
 
-<section class="section">
+<section class="section reveal" id="folders">
   <div class="section-head">
     <h2 class="section-title">Folders</h2>
     <span class="section-meta">00 – 11 · 99 archive</span>
   </div>
-  <div class="grid" id="folders">
-    <a class="card" href="https://drive.google.com/drive/folders/1fgjvFUF3hSvbiE50B9WWoBZNmynN81c3" data-k="index start here 00"><div class="card-num">00</div><div class="card-name">INDEX &amp; START HERE</div><div class="card-desc">Master index, client info page, file register, READMEs.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5" data-k="operations 01 timetable evaluations competitions show"><div class="card-num">01</div><div class="card-name">Operations</div><div class="card-desc">Timetable, evaluations, competitions, show &amp; events, SOPs.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1AMD7D4ynculorhIjokkhBF-HYmObfjBK" data-k="people 02 mentors staff training"><div class="card-num">02</div><div class="card-name">People</div><div class="card-desc">Mentor roster, roles, training, onboarding, performance.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1sfWR1gMeGMhBtiyr-SSRBoozRGn8aFr9" data-k="programmes curriculum 03"><div class="card-num">03</div><div class="card-name">Programmes &amp; Curriculum</div><div class="card-desc">Curricula, student material, lesson plans, progression.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1hn74aoH79TRM5vT1RwzWBROt-PpEloUU" data-k="finance 04 fees invoices vat"><div class="card-num">04</div><div class="card-name">Finance</div><div class="card-desc">Rate card, fees, invoices, collections, VAT, trip budgets.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1G6ohTp_Gtl1jOeQEO5bP_GjbmMsBY_F5" data-k="students enrolment 05"><div class="card-num">05</div><div class="card-name">Students &amp; Enrolment</div><div class="card-desc">Student records, enrolment forms, parent comms.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1zTUoRoPz8PH2QxNfsxcwBEO_T7LoK_gR" data-k="brand marketing 06"><div class="card-num">06</div><div class="card-name">Brand &amp; Marketing</div><div class="card-desc">Brand assets, website, SEO, campaigns, partnerships.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1HJxyzO2sh9FmL0bLSYd-lMJNwK5KpN4F" data-k="compliance legal 07 popia"><div class="card-num">07</div><div class="card-name">Compliance &amp; Legal</div><div class="card-desc">POPIA, child protection, terms, insurance.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1gRZ0LJQREWJ-9RMXXyw2ShsurIrZO6MG" data-k="meetings decisions 08"><div class="card-num">08</div><div class="card-name">Meetings &amp; Decisions</div><div class="card-desc">Minutes, decisions log, open actions.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1ZAmKqgDB7xc292njA3l94Q0yujprfDeU" data-k="systems technology 09"><div class="card-num">09</div><div class="card-name">Systems &amp; Technology</div><div class="card-desc">System spec, bootcamp schedule, integrations.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1GtTPEPwDkM5jgNYVoHDymx0uyFc8AlyS" data-k="templates 10"><div class="card-num">10</div><div class="card-name">Templates</div><div class="card-desc">Letters, emails, reports, forms.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1gjyuOP1RLQDmMoUrMAJBREzY6JGaC1VC" data-k="media content assets 11"><div class="card-num">11</div><div class="card-name">Media &amp; Content Assets</div><div class="card-desc">Mixes, video, shoots, photos, class pictures.</div></a>
-    <a class="card" href="https://drive.google.com/drive/folders/1A2cz99cUmERjoHgGRm469EbDqFRZzlrh" data-k="archive 99"><div class="card-num">99</div><div class="card-name">Archive</div><div class="card-desc">Superseded and historical files. Nothing deleted.</div></a>
+  <div class="grid" id="folderGrid">
+    <a class="card" href="https://drive.google.com/drive/folders/1fgjvFUF3hSvbiE50B9WWoBZNmynN81c3" data-k="index start here 00"><div class="card-top"><span class="card-num">00</span><span class="card-arrow">↗</span></div><div class="card-name">INDEX &amp; START HERE</div><div class="card-desc">Master index, client info page, file register, READMEs for every folder.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5" data-k="operations 01 timetable evaluations competitions show"><div class="card-top"><span class="card-num">01</span><span class="card-arrow">↗</span></div><div class="card-name">Operations</div><div class="card-desc">Timetable, evaluations, competitions, show &amp; events, SOPs and business rules.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1AMD7D4ynculorhIjokkhBF-HYmObfjBK" data-k="people 02 mentors staff training"><div class="card-top"><span class="card-num">02</span><span class="card-arrow">↗</span></div><div class="card-name">People</div><div class="card-desc">Mentor roster, roles, training, onboarding, performance frameworks.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1sfWR1gMeGMhBtiyr-SSRBoozRGn8aFr9" data-k="programmes curriculum 03"><div class="card-top"><span class="card-num">03</span><span class="card-arrow">↗</span></div><div class="card-name">Programmes &amp; Curriculum</div><div class="card-desc">Curricula, student material, lesson plans, progression.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1hn74aoH79TRM5vT1RwzWBROt-PpEloUU" data-k="finance 04 fees invoices vat"><div class="card-top"><span class="card-num">04</span><span class="card-arrow">↗</span></div><div class="card-name">Finance</div><div class="card-desc">Rate card, fees, invoices, collections, VAT, trip budgets.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1G6ohTp_Gtl1jOeQEO5bP_GjbmMsBY_F5" data-k="students enrolment 05"><div class="card-top"><span class="card-num">05</span><span class="card-arrow">↗</span></div><div class="card-name">Students &amp; Enrolment</div><div class="card-desc">Student records, enrolment forms, parent communications.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1zTUoRoPz8PH2QxNfsxcwBEO_T7LoK_gR" data-k="brand marketing 06"><div class="card-top"><span class="card-num">06</span><span class="card-arrow">↗</span></div><div class="card-name">Brand &amp; Marketing</div><div class="card-desc">Brand assets, website, SEO, campaigns, partnerships.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1HJxyzO2sh9FmL0bLSYd-lMJNwK5KpN4F" data-k="compliance legal 07 popia"><div class="card-top"><span class="card-num">07</span><span class="card-arrow">↗</span></div><div class="card-name">Compliance &amp; Legal</div><div class="card-desc">POPIA, child protection, terms and conditions, insurance.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1gRZ0LJQREWJ-9RMXXyw2ShsurIrZO6MG" data-k="meetings decisions 08"><div class="card-top"><span class="card-num">08</span><span class="card-arrow">↗</span></div><div class="card-name">Meetings &amp; Decisions</div><div class="card-desc">Minutes, decisions log, open actions.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1ZAmKqgDB7xc292njA3l94Q0yujprfDeU" data-k="systems technology 09"><div class="card-top"><span class="card-num">09</span><span class="card-arrow">↗</span></div><div class="card-name">Systems &amp; Technology</div><div class="card-desc">System spec, bootcamp schedule, integrations.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1GtTPEPwDkM5jgNYVoHDymx0uyFc8AlyS" data-k="templates 10"><div class="card-top"><span class="card-num">10</span><span class="card-arrow">↗</span></div><div class="card-name">Templates</div><div class="card-desc">Letters, emails, reports, forms.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1gjyuOP1RLQDmMoUrMAJBREzY6JGaC1VC" data-k="media content assets 11"><div class="card-top"><span class="card-num">11</span><span class="card-arrow">↗</span></div><div class="card-name">Media &amp; Content Assets</div><div class="card-desc">Mixes, video, shoots, photos, class pictures.</div></a>
+    <a class="card" href="https://drive.google.com/drive/folders/1A2cz99cUmERjoHgGRm469EbDqFRZzlrh" data-k="archive 99"><div class="card-top"><span class="card-num">99</span><span class="card-arrow">↗</span></div><div class="card-name">Archive</div><div class="card-desc">Superseded and historical files. Nothing deleted.</div></a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-head"><h2 class="section-title">Key documents</h2><span class="section-meta">curricula, standards, policies</span></div>
-  <div class="doclist">
-    <a href="https://docs.google.com/document/d/1_HFGxW1LeoXxg95W1azElr2jRHtnJXRH367qxQsM6Pc/edit">Beginner Curriculum</a>
-    <a href="https://docs.google.com/document/d/1y63i4j0jK3rAgfsZFCraa5hHxC12iDe1n9QXm4mHWxg/edit">Intermediate Curriculum</a>
-    <a href="https://docs.google.com/document/d/1QaXHKXK3iTHQnS8nh2BKo7EZdEXs9MdkWgGr4KOcl5M/edit">Advanced Curriculum</a>
-    <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a>
-    <a href="https://docs.google.com/document/d/1Epcqp9FI0KuHZIHrqBzyNivf-klWDh65tOmCLx4Rjkg/edit">Students code of Conduct</a>
-    <a href="https://docs.google.com/document/d/19inCOimMdxB7T0UKP3Ik6ySNzB-ftz7qnmIE5_2ctww/edit">Employee code of conduct</a>
-    <a href="https://docs.google.com/document/d/14X0cW9IppCsHrjX8Dyj_tAoJQf2ymk4UK-jaHKr75E0/edit">Disciplinary procedure</a>
-    <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite</a>
-    <a href="https://docs.google.com/document/d/1VUG-sQ7FmlYLEZFrlHuHbq70OXL3tYuE6H64Q9BqPPc/edit">Confirmation of enrollment</a>
-    <a href="https://docs.google.com/document/d/1xc2gGvRoBfcuvPCIkzpiaatYDX1SYG90ST7NJ3NLhMM/edit">Dancer Archetypes</a>
-    <a href="https://docs.google.com/document/d/1IeVTkOaxNlNfzQn08HxQ0s-ZHNcp14el7XTvZo4sbCs/edit">Vision</a>
-    <a href="https://docs.google.com/document/d/16nEgEzF5mkNEFK02lr75LLO-XLO7o16My4x7m9UFyj8/edit">Dance terms</a>
-    <a href="https://docs.google.com/document/d/10313y8ZbiMjEd8SuVNcTZOyTIombUjlFO-hqR6MVaYk/edit">Departments</a>
-    <a href="https://docs.google.com/document/d/1SpE1BCH2JUT88DIQm6vD3NTLBD6WKbbUTCRgZ-xMeDE/edit">Hip Hop course</a>
-    <a href="https://docs.google.com/document/d/1Azoznk2MzHWolIHqbR2Y2pmPVgVgSWCJjqhzKaykvyo/edit">Functional Specification</a>
-    <a href="https://docs.google.com/document/d/1Hlnvfw6eSMNmrBNxwHgfRTSlaZ_72GEnaRvmeIwdARk/edit">Strategy Meeting</a>
+<section class="section reveal" id="documents">
+  <div class="section-head">
+    <h2 class="section-title">Key documents</h2>
+    <span class="section-meta">curricula · standards · policies</span>
+  </div>
+  <div class="docgrid">
+    <a class="doc" href="https://docs.google.com/document/d/1_HFGxW1LeoXxg95W1azElr2jRHtnJXRH367qxQsM6Pc/edit">Beginner Curriculum</a>
+    <a class="doc" href="https://docs.google.com/document/d/1y63i4j0jK3rAgfsZFCraa5hHxC12iDe1n9QXm4mHWxg/edit">Intermediate Curriculum</a>
+    <a class="doc" href="https://docs.google.com/document/d/1QaXHKXK3iTHQnS8nh2BKo7EZdEXs9MdkWgGr4KOcl5M/edit">Advanced Curriculum</a>
+    <a class="doc" href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a>
+    <a class="doc" href="https://docs.google.com/document/d/1Epcqp9FI0KuHZIHrqBzyNivf-klWDh65tOmCLx4Rjkg/edit">Students code of Conduct</a>
+    <a class="doc" href="https://docs.google.com/document/d/19inCOimMdxB7T0UKP3Ik6ySNzB-ftz7qnmIE5_2ctww/edit">Employee code of conduct</a>
+    <a class="doc" href="https://docs.google.com/document/d/14X0cW9IppCsHrjX8Dyj_tAoJQf2ymk4UK-jaHKr75E0/edit">Disciplinary procedure</a>
+    <a class="doc" href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite</a>
+    <a class="doc" href="https://docs.google.com/document/d/1VUG-sQ7FmlYLEZFrlHuHbq70OXL3tYuE6H64Q9BqPPc/edit">Confirmation of enrollment</a>
+    <a class="doc" href="https://docs.google.com/document/d/1xc2gGvRoBfcuvPCIkzpiaatYDX1SYG90ST7NJ3NLhMM/edit">Dancer Archetypes</a>
+    <a class="doc" href="https://docs.google.com/document/d/1IeVTkOaxNlNfzQn08HxQ0s-ZHNcp14el7XTvZo4sbCs/edit">Vision</a>
+    <a class="doc" href="https://docs.google.com/document/d/16nEgEzF5mkNEFK02lr75LLO-XLO7o16My4x7m9UFyj8/edit">Dance terms</a>
+    <a class="doc" href="https://docs.google.com/document/d/10313y8ZbiMjEd8SuVNcTZOyTIombUjlFO-hqR6MVaYk/edit">Departments</a>
+    <a class="doc" href="https://docs.google.com/document/d/1SpE1BCH2JUT88DIQm6vD3NTLBD6WKbbUTCRgZ-xMeDE/edit">Hip Hop course</a>
+    <a class="doc" href="https://docs.google.com/document/d/1Azoznk2MzHWolIHqbR2Y2pmPVgVgSWCJjqhzKaykvyo/edit">Functional Specification</a>
+    <a class="doc" href="https://docs.google.com/document/d/1Hlnvfw6eSMNmrBNxwHgfRTSlaZ_72GEnaRvmeIwdARk/edit">Strategy Meeting</a>
   </div>
 </section>
 
-<section class="section">
-  <div class="section-head"><h2 class="section-title">Excluded</h2><span class="section-meta">left in original location</span></div>
-  <div class="note"><strong>ACCOUNTING - DANCE ACADEMY</strong> and <strong>JHB KRYPTONITE</strong> were not moved. Invoices, NEDBANK statements and JHB content remain where they were.</div>
+<section class="section reveal">
+  <div class="section-head">
+    <h2 class="section-title">Excluded</h2>
+    <span class="section-meta">left in original location</span>
+  </div>
+  <div class="note">
+    <span class="note-icon">ⓘ</span>
+    <p><strong>ACCOUNTING - DANCE ACADEMY</strong> and <strong>JHB KRYPTONITE</strong> were not moved. Invoices, NEDBANK statements and JHB content remain where they were.</p>
+  </div>
 </section>
 
-<section class="section">
-  <div class="section-head"><h2 class="section-title">New staff</h2><span class="section-meta">start here</span></div>
-  <ol style="padding-left:20px;color:var(--ts)">
-    <li style="margin-bottom:8px">Read <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite Dance Academy</a>.</li>
-    <li style="margin-bottom:8px">Read <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a> and the codes of conduct.</li>
-    <li style="margin-bottom:8px">Check <a href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5">01 — Operations</a> for the current timetable and evaluation schedule.</li>
-    <li>Ask the business owner which folders you have edit access to.</li>
-  </ol>
+<section class="section reveal" id="onboard">
+  <div class="section-head">
+    <h2 class="section-title">New staff</h2>
+    <span class="section-meta">start here</span>
+  </div>
+  <div class="steps">
+    <div class="step"><h4>Welcome</h4><p>Read <a href="https://docs.google.com/document/d/19JLKU2F7L2H4fDojCeEF5TQG9AxQEVLtXWCNe7e4K5M/edit">Welcome to Kryptonite Dance Academy</a>.</p></div>
+    <div class="step"><h4>Standards</h4><p>Read <a href="https://docs.google.com/document/d/1fUpqvdzdNEW1kHjV8hoYbOozw8srK0fjV0SUG8q8T3o/edit">Teaching Standards</a> and the codes of conduct.</p></div>
+    <div class="step"><h4>Operations</h4><p>Check <a href="https://drive.google.com/drive/folders/1JWsfdvNuYEAwgzEqNOAcHApN7jEW9ht5">01 — Operations</a> for the current timetable and evaluation schedule.</p></div>
+    <div class="step"><h4>Access</h4><p>Ask the business owner which folders you have edit access to.</p></div>
+  </div>
 </section>
 
 </main>
 
 <footer>
   <span>Kryptonite Dance Academy</span>
-  <span>Internal Drive Index &middot; 2026-10-29</span>
+  <span><a href="client.html">Client information</a> · Internal Drive Index · 2026-10-29</span>
 </footer>
 
 <script>
-// Client-side filter
+// Filter
 const q = document.getElementById('q');
-const cards = [...document.querySelectorAll('#folders .card')];
+const cards = [...document.querySelectorAll('#folderGrid .card')];
 q.addEventListener('input', () => {
   const v = q.value.trim().toLowerCase();
   cards.forEach(c => {
@@ -325,13 +273,18 @@ q.addEventListener('input', () => {
     c.style.display = hay.includes(v) ? '' : 'none';
   });
 });
-// Subtle cursor-tracking glow on cards
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('pointermove', e => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+// Cursor glow
+document.querySelectorAll('.card,.tile').forEach(el => {
+  el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+    el.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
   });
 });
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body></html>
